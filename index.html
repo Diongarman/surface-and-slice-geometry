@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111926">
+  <title>Surface & Slice — Geometry Explorer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">∩</span><span>Surface <em>&</em> Slice</span></div>
+      <span class="top-note">A small geometry lab</span>
+    </header>
+    <main>
+      <section class="intro" aria-labelledby="title">
+        <div class="eyebrow"><span class="eyebrow-line"></span> See the same set from two directions</div>
+        <h1 id="title">Where a surface <i>meets</i> a plane.</h1>
+        <p>Choose a surface, move a cutting plane, and follow the intersection from space into a flat view.</p>
+      </section>
+
+      <div class="workbench">
+        <aside class="controls card" aria-label="Explorer controls">
+          <div class="section-heading"><span class="step">01</span><h2>Shape the surface</h2></div>
+          <label class="field-label" for="surface-select">SURFACE</label>
+          <select id="surface-select">
+            <option value="paraboloid">Circular paraboloid · z = x² + y²</option>
+            <option value="wide">Wide paraboloid · z = (x² + y²) / 2</option>
+            <option value="saddle">Saddle · z = x² − y²</option>
+            <option value="tilted">Tilted plane · z = x + y</option>
+            <option value="flat">Coordinate plane · z = 0</option>
+            <option value="custom">My equation</option>
+          </select>
+          <label class="field-label equation-label" for="equation">EQUATION &nbsp; z =</label>
+          <div class="input-row"><input id="equation" type="text" value="x² + y²" autocomplete="off" spellcheck="false" aria-describedby="equation-hint equation-error"><button id="apply" type="button">Plot</button></div>
+          <div id="equation-error" class="error" role="alert" hidden></div>
+          <div id="equation-hint" class="hint">Try <code>sin(x) + cos(y)</code> or <code>x^2 - y^2</code>. Use <code>*</code> to multiply.</div>
+
+          <div class="divider"></div>
+          <div class="section-heading"><span class="step">02</span><h2>Choose a cut</h2></div>
+          <label class="field-label" for="slice-select">PLANE</label>
+          <select id="slice-select">
+            <option value="horizontal">Horizontal · z = c</option>
+            <option value="vertical-x">Vertical · x = c</option>
+            <option value="vertical-y">Vertical · y = c</option>
+            <option value="oblique">Tilted · z = ax + by + c</option>
+          </select>
+          <div class="sliders">
+            <div class="slider-row" id="c-row"><div class="slider-head"><label id="c-label" for="c-range">Height c</label><output id="c-value" for="c-range">2.0</output></div><input id="c-range" type="range" min="-2" max="8" step="0.1" value="2"></div>
+            <div class="slider-row oblique-only" id="a-row" hidden><div class="slider-head"><label for="a-range">Tilt a · x direction</label><output id="a-value" for="a-range">0.8</output></div><input id="a-range" type="range" min="-2" max="2" step="0.1" value="0.8"></div>
+            <div class="slider-row oblique-only" id="b-row" hidden><div class="slider-head"><label for="b-range">Tilt b · y direction</label><output id="b-value" for="b-range">0.4</output></div><input id="b-range" type="range" min="-2" max="2" step="0.1" value="0.4"></div>
+          </div>
+          <div class="preset-block">
+            <div class="field-label">JUMP TO A VIEW</div>
+            <div class="preset-list">
+              <button type="button" class="preset active" data-preset="rings">◉ <span>Circular contours</span></button>
+              <button type="button" class="preset" data-preset="xz">⊞ <span>Plane y = 0</span></button>
+              <button type="button" class="preset" data-preset="yz">⊞ <span>Plane x = 0</span></button>
+              <button type="button" class="preset" data-preset="tilt">⌁ <span>Oblique slice</span></button>
+            </div>
+          </div>
+        </aside>
+
+        <section class="views" aria-label="Linked geometric views">
+          <div class="view-card card space-card">
+            <div class="view-heading"><div><span class="view-index">A / SPACE</span><h2>Surface and cutting plane</h2></div><span class="view-badge"><span class="badge-dot"></span> 3D</span></div>
+            <div class="canvas-wrap space-wrap"><canvas id="space" tabindex="0" aria-label="Interactive three-dimensional surface with a cutting plane. Drag or use arrow keys to rotate; scroll or use plus and minus to zoom."></canvas><div class="plot-corner"><span class="swatch teal"></span> surface <span class="swatch coral"></span> intersection</div></div>
+            <div class="view-footer"><span>Drag to rotate · scroll or pinch to zoom</span><button type="button" id="reset-view">Reset view ↗</button></div>
+          </div>
+          <div class="view-card card flat-card">
+            <div class="view-heading"><div><span class="view-index">B / FLAT VIEW</span><h2 id="flat-title">Contour in the xy-plane</h2></div><span class="view-badge flat-badge">2D</span></div>
+            <div class="canvas-wrap flat-wrap"><canvas id="flat" aria-label="Two-dimensional view of the intersection"></canvas></div>
+            <div class="view-footer flat-footer"><span id="flat-caption">The circle seen from directly above</span><span id="flat-metric" class="metric">z = 2.0</span></div>
+          </div>
+        </section>
+      </div>
+
+      <section class="notation card" aria-live="polite">
+        <div class="notation-head"><span class="step">03</span><div><span class="view-index">THE SAME POINTS, WRITTEN DOWN</span><h2>Read the intersection as a set</h2></div></div>
+        <div class="math-grid"><div class="math-item"><span>SURFACE</span><div id="surface-set" class="math"></div></div><div class="math-item"><span>CUTTING PLANE</span><div id="plane-set" class="math"></div></div><div class="math-item result"><span>INTERSECTION / FLAT VIEW</span><div id="intersection-set" class="math"></div></div></div>
+        <p id="explanation" class="explanation"></p>
+      </section>
+    </main>
+    <footer>Explore locally in your browser. Equations and slider values are not sent anywhere.</footer>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
