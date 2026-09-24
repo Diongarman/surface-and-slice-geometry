@@ -4,7 +4,12 @@ An interactive geometry explorer for connecting a surface, a cutting plane, its 
 
 ## Run locally
 
-No installation or build step is needed. Clone or download this repository, then open `dist/index.html` in a modern browser.
+No installation or build step is needed. Clone the repository (or download its ZIP from GitHub), then open `dist/index.html` in a modern browser:
+
+```sh
+git clone https://github.com/Diongarman/surface-and-slice-geometry.git
+cd surface-and-slice-geometry
+```
 
 If you prefer a local web address, run this from the repository root:
 
@@ -27,4 +32,3 @@ The surface input supports numbers, `x`, `y`, `+`, `-`, `*`, `/`, `^`, parenthes
 
 - `dist/index.html`, `dist/styles.css`, `dist/app.js`: the complete static site, with no runtime dependencies.
 - `tests/smoke.cjs`: optional checks for formulas, contours, presets, sliders, rotation, and zoom. Run with `node tests/smoke.cjs` from the repository root.
-- `.openai/hosting.json`: configuration for the existing Sites deployment. It is not needed to run locally.
