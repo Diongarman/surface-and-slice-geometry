@@ -73,12 +73,17 @@
             <div class="canvas-wrap flat-wrap"><canvas id="flat" aria-label="Two-dimensional view of the intersection"></canvas></div>
             <div class="view-footer flat-footer"><span id="flat-caption">The circle seen from directly above</span><span id="flat-metric" class="metric">z = 2.0</span></div>
           </div>
+          <div class="intersection-card card" aria-live="polite">
+            <div class="intersection-head"><span class="intersection-mark"></span><span>THE HIGHLIGHTED INTERSECTION · 3D POINTS</span></div>
+            <div id="intersection-set" class="intersection-equation"></div>
+            <div class="flat-set-row"><span>IN THE 2D VIEW</span><div id="flat-set" class="flat-equation"></div></div>
+          </div>
         </section>
       </div>
 
-      <section class="notation card" aria-live="polite">
-        <div class="notation-head"><span class="step">03</span><div><span class="view-index">THE SAME POINTS, WRITTEN DOWN</span><h2>Read the intersection as a set</h2></div></div>
-        <div class="math-grid"><div class="math-item"><span>SURFACE</span><div id="surface-set" class="math"></div></div><div class="math-item"><span>CUTTING PLANE</span><div id="plane-set" class="math"></div></div><div class="math-item result"><span>INTERSECTION / FLAT VIEW</span><div id="intersection-set" class="math"></div></div></div>
+      <section class="notation card">
+        <div class="notation-head"><span class="step">03</span><div><span class="view-index">WHY THESE POINTS?</span><h2>The two sets being intersected</h2></div></div>
+        <div class="math-grid"><div class="math-item"><span>SURFACE</span><div id="surface-set" class="math"></div></div><div class="math-item"><span>CUTTING PLANE</span><div id="plane-set" class="math"></div></div></div>
         <p id="explanation" class="explanation"></p>
       </section>
     </main>

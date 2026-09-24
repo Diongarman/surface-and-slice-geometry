@@ -63,34 +63,42 @@
   }
   function updateNotation(){
     const f=escapeHTML(state.expr),c=fmt(state.c),a=fmt(state.a),b=fmt(state.b),mode=state.mode;
-    let plane,intersection,title,caption,explain,metric;
+    let plane,intersection,flatSet,title,caption,explain,metric;
     if(mode==='horizontal'){
       plane=`P = {(x, y, z) ∈ ℝ³ ∣ z = ${c}}`;
-      intersection=`S ∩ P = {(x, y, ${c}) ∣ ${f} = ${c}}`;
+      intersection=`I = S ∩ P = {(x, y, ${c}) ∈ ℝ³ ∣ (x, y) ∈ [−2, 2]² ∧ ${f} = ${c}}`;
+      flatSet=`C = {(x, y) ∈ ℝ² ∣ (x, y) ∈ [−2, 2]² ∧ ${f} = ${c}}`;
+      if(state.kind==='paraboloid'&&state.c<0){intersection='I = S ∩ P = ∅';flatSet='C = ∅'}
       title='Contour in the xy-plane';caption='The intersection projected straight down';metric=`z = ${c}`;
       explain=state.kind==='paraboloid'?(state.c>=0?`For this paraboloid, x² + y² = ${c}. In the xy-plane this is a circle of radius √${c} ≈ ${fmt(Math.sqrt(state.c))}.`:'This plane is below the paraboloid, so there is no real intersection.'):'The flat view keeps x and y and draws the points where the surface has the chosen height.';
     }else if(mode==='vertical-x'){
       plane=`P = {(x, y, z) ∈ ℝ³ ∣ x = ${c}}`;
-      intersection=`S ∩ P = {(${c}, y, z) ∣ z = f(${c}, y)}`;
+      const height=state.kind==='paraboloid'?`${fmt(state.c*state.c)} + y²`:state.expr.replace(/\bx\b/g,`(${c})`);
+      intersection=`I = S ∩ P = {(${c}, y, ${height}) ∈ ℝ³ ∣ y ∈ [−2, 2]}`;
+      flatSet=`C = {(y, ${height}) ∈ ℝ² ∣ y ∈ [−2, 2]}`;
       title='Cross-section in the yz-plane';caption='Use y horizontally and z vertically';metric=`x = ${c}`;
       explain=state.kind==='paraboloid'?`Substitute x = ${c} into z = x² + y². The cross-section is z = ${fmt(state.c*state.c)} + y².`:'Hold x fixed and plot z = f(c, y) against y.';
     }else if(mode==='vertical-y'){
       plane=`P = {(x, y, z) ∈ ℝ³ ∣ y = ${c}}`;
-      intersection=`S ∩ P = {(x, ${c}, z) ∣ z = f(x, ${c})}`;
+      const height=state.kind==='paraboloid'?`x² + ${fmt(state.c*state.c)}`:state.expr.replace(/\by\b/g,`(${c})`);
+      intersection=`I = S ∩ P = {(x, ${c}, ${height}) ∈ ℝ³ ∣ x ∈ [−2, 2]}`;
+      flatSet=`C = {(x, ${height}) ∈ ℝ² ∣ x ∈ [−2, 2]}`;
       title='Cross-section in the xz-plane';caption='Use x horizontally and z vertically';metric=`y = ${c}`;
       explain=state.kind==='paraboloid'?`Substitute y = ${c} into z = x² + y². The cross-section is z = x² + ${fmt(state.c*state.c)}.`:'Hold y fixed and plot z = f(x, c) against x.';
     }else{
       const planeExpr=`${a}x${signed(state.b)}y${signed(state.c)}`;
       plane=`P = {(x, y, z) ∈ ℝ³ ∣ z = ${planeExpr}}`;
-      intersection=`S ∩ P = {(x, y, z) ∣ z = ${f} = ${planeExpr}}`;
+      intersection=`I = S ∩ P = {(x, y, ${f}) ∈ ℝ³ ∣ (x, y) ∈ [−2, 2]² ∧ ${f} = ${planeExpr}}`;
+      flatSet=`C = {(x, y) ∈ ℝ² ∣ (x, y) ∈ [−2, 2]² ∧ ${f} = ${planeExpr}}`;
       title='Projected trace in the xy-plane';caption='The 3D intersection viewed from above';metric=`a=${a} · b=${b}`;
       if(state.kind==='paraboloid'){
         const r2=state.c+(state.a*state.a+state.b*state.b)/4;
+        if(r2<0){intersection='I = S ∩ P = ∅';flatSet='C = ∅'}
         explain=r2>=0?`Completing the square gives (x − ${fmt(state.a/2)})² + (y − ${fmt(state.b/2)})² = ${fmt(r2)}. The tilted cut projects to a circle centred at (${fmt(state.a/2)}, ${fmt(state.b/2)}).`:'The tilted plane misses the paraboloid: its projected circle would have negative squared radius.';
       }else explain='The flat view plots the (x, y) positions where the surface height equals the tilted plane height.';
     }
     $('surface-set').textContent=`S = {(x, y, z) ∈ ℝ³ ∣ z = ${state.expr}}`;
-    $('plane-set').textContent=plane;$('intersection-set').textContent=intersection;
+    $('plane-set').textContent=plane;$('intersection-set').textContent=intersection;$('flat-set').textContent=flatSet;
     $('flat-title').textContent=title;$('flat-caption').textContent=caption;$('flat-metric').textContent=metric;$('explanation').textContent=explain;
     flat.setAttribute('aria-label',title+'. '+explain);
   }
