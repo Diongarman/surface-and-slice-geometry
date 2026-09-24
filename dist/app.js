@@ -37,7 +37,7 @@
   }
 
   function setSurface(expr,kind){
-    try{const fn=parse(expr);state.f=fn;state.expr=expr.trim();state.kind=kind;$('equation-error').hidden=true;
+    try{const rhs=expr.trim().replace(/^z\s*=\s*/i,'');const fn=parse(rhs);state.f=fn;state.expr=rhs;state.kind=kind;$('equation-error').hidden=true;
       if(kind==='custom')$('surface-select').value='custom';
       rebuild();return true;
     }catch(e){$('equation-error').textContent=e.message;$('equation-error').hidden=false;return false}
