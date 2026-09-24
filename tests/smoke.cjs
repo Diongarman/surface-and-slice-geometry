@@ -10,7 +10,7 @@ const presets=['rings','xz','yz','tilt'].map(name=>{const n=element('preset-'+na
 const document={getElementById(id){assert(nodes[id],id);return nodes[id]},querySelectorAll(){return presets}};
 const window={devicePixelRatio:1};
 const sandbox={document,window,ResizeObserver:class{observe(){}},Math,Number,console};
-vm.runInNewContext(fs.readFileSync('app.js','utf8'),sandbox);
+vm.runInNewContext(fs.readFileSync('dist/app.js','utf8'),sandbox);
 const {parse,contourSegments,state}=window.__geometryExplorer;
 const near=(a,b,t=.03)=>assert(Math.abs(a-b)<t,`${a} should be close to ${b}`);
 
